@@ -15,7 +15,7 @@ const TodoFetch = () => {
 
     async function getTasks() {
         try {
-            const response = await fetch('https://assets.breatheco.de/apis/fake/todos/user/JorgeCasadoB',
+            const response = await fetch('https://fake-todo-list-52f9a4ed80ce.herokuapp.com/todos/user/Jorgecasadob',
                 {
                     method: "GET",
                     headers:
@@ -29,6 +29,7 @@ const TodoFetch = () => {
                 setTaskList(body);
                 setTask("");
             } else {
+                createUser();
                 console.log("error obtaining a tesk");
             }
         }
@@ -54,7 +55,7 @@ const TodoFetch = () => {
                 return;
             }
             try {
-                const response = await fetch('https://assets.breatheco.de/apis/fake/todos/user/JorgeCasadoB',
+                const response = await fetch('https://fake-todo-list-52f9a4ed80ce.herokuapp.com/todos/user/Jorgecasadob',
                     {
                         method: "PUT",
                         headers:
@@ -63,7 +64,6 @@ const TodoFetch = () => {
                         }
                         , body: JSON.stringify([...taskList, { label: task, done: false }])
                     });
-
                 if (response.ok) {
                     getTasks();
                     setTask("");
@@ -83,7 +83,7 @@ const TodoFetch = () => {
         const newTodo = taskList.filter((task, index) => index != Id);
 
         try {
-            const response = await fetch('https://assets.breatheco.de/apis/fake/todos/user/JorgeCasadoB',
+            const response = await fetch('https://fake-todo-list-52f9a4ed80ce.herokuapp.com/todos/user/Jorgecasadob',
                 {
                     method: "PUT",
                     headers:
@@ -94,7 +94,7 @@ const TodoFetch = () => {
                 });
 
             if (response.ok) {
-                getTasks([newTodo]);
+                getTasks();
                 setTask("");
             } else {
                 console.log("error obtaining a tesk");
@@ -103,6 +103,46 @@ const TodoFetch = () => {
         catch (exceptionVar) {
             console.log(exceptionVar);
         }
+    }
+    const deleteTodo = async () => {
+        try {
+            const response = await fetch('https://fake-todo-list-52f9a4ed80ce.herokuapp.com/todos/user/Jorgecasadob',
+                {
+                    method: "DELETE",
+                    headers:
+                    {
+                        "Content-Type": "application/json"
+                    }
+                });
+            if (response.ok) {
+                getTasks();
+            } else {
+                console.log("error deleting tasks");
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
+    const createUser = async () => {
+        try {
+            const response = await fetch('https://fake-todo-list-52f9a4ed80ce.herokuapp.com/todos/user/Jorgecasadob',
+                {
+                    method: "POST",
+                    headers:
+                    {
+                        "Content-Type": "application/json"
+                    }
+                    , body: JSON.stringify([])
+                });
+                if (response.ok) {
+                    getTasks();
+                }
+        } catch (error) {
+            console.log(error);
+          } 
+        }
+    const deleteAllTasks = () => {
+        deleteTodo();
     }
     return (
 
@@ -125,7 +165,8 @@ const TodoFetch = () => {
                     ? "No tasks listed yet "
                     : taskList.length + " Items Left"}
             </div>
+            {taskList.length > 0 && <button type="button" className="btn btn-secondary" onClick={deleteAllTasks}>Close all tasks</button>}
         </div>
     );
 };
-export default TodoFetch;
+export default TodoFetch; 
